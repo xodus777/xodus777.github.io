@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="MorphGS: Morphology-Adaptive Articulated 3D Motion Transfer from Videos">
+  <meta name="keywords" content="MorphGS, motion transfer, articulated character animation, video-driven retargeting, 3D Gaussian Splatting">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MorphGS: Morphology-Adaptive Articulated 3D Motion Transfer from Videos</title>
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      color: #222;
+    }
+
+    .publication-title,
+    .section-title,
+    .comparison-block-title {
+      font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    }
+
+    .publication-title {
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .publication-authors {
+      margin-top: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .author-block {
+      display: inline-block;
+      margin: 0 0.25rem;
+    }
+
+    .publication-links {
+      margin-top: 1.25rem;
+    }
+
+    .teaser {
+      margin-top: 1.5rem;
+    }
+
+    .teaser img,
+    .teaser video {
+      width: 100%;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .teaser-caption {
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 0.75rem;
+    }
+
+    .section-title {
+      margin-bottom: 1rem;
+    }
+
+    .highlight-box {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      height: 100%;
+    }
+
+    .highlight-box h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .method-placeholder {
+      background: #fff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 2rem;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .comparison-container {
+      width: min(96vw, 1000px);
+      max-width: 1000px;
+    }
+
+    .qualitative-wrapper {
+      margin-top: 2rem;
+    }
+
+    .comparison-block {
+      margin-bottom: 3.25rem;
+    }
+
+    .comparison-block-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.35rem;
+    }
+
+    .comparison-block-desc {
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .comparison-grid-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .media-panel {
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+      width: 100%;
+      /* max-width: min(96vw, 1000px); */
+      margin: 0 auto;
+    }
+
+    .media-box {
+      position: relative;
+      width: 100%;
+      background: #fff;
+    }
+
+    .media-box video {
+      background: #fff;
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      image-rendering: auto;
+      backface-visibility: hidden;
+    }
+
+    .bibtex-box {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    .note-section {
+      padding-top: 0;
+    }
+
+    footer {
+      padding: 2rem 1rem;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    @media screen and (max-width: 1280px) {
+      .comparison-container { max-width: 1160px; }
+    }
+
+    @media screen and (max-width: 1023px) {
+      .comparison-container { max-width: 960px; }
+    }
+
+    @media screen and (max-width: 768px) {
+      .comparison-container { max-width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">
+            MorphGS: Morphology-Adaptive Articulated 3D Motion Transfer from Videos
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Taeyeon Kim<sup>*</sup>,</span>
+            <span class="author-block">Youngju Na<sup>*</sup>,</span>
+            <span class="author-block">Jumin Lee,</span>
+            <span class="author-block">Sebin Lee,</span>
+            <span class="author-block">Minhyuk Sung,</span>
+            <span class="author-block">and Sung-Eui Yoon<sup>†</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Department of Computer Science, KAIST</span>
+          </div>
+
+          <div class="is-size-6 has-text-centered" style="margin-top: 0.6rem;">
+            <sup>*</sup>Equal contribution.&nbsp;&nbsp;
+            <sup>†</sup>Corresponding author.
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">ECCV 2026</span>
+          </div>
+
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/2601.02716" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+
+            <span class="link-block">
+              <a href="https://github.com/xodus777/MorphGS" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code (Coming soon)</span>
+              </a>
+            </span>
+          </div>
+
+          <div class="teaser">
+            <img src="./static/images/teaser.png" alt="MorphGS teaser image">
+            <p class="teaser-caption">
+              MorphGS directly optimizes target morphology and pose parameters to reproduce the observed motion without explicit source 3D reconstruction or category-specific parametric templates.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="section note-section">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 section-title has-text-centered">Note</h2>
+    <div class="content has-text-justified">
+      <p>
+        This page presents qualitative comparison videos with baseline methods.
+        For double-blind review, the page is anonymized and contains no external links.
+        All raw videos are available in <code>./static/videos</code>.
+        Code and data will be released after the review process.
+      </p>
+    </div>
+  </div>
+</section> -->
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 section-title has-text-centered">Abstract</h2>
+    <div class="content has-text-justified">
+      <p>
+        Transferring articulated motion from monocular videos to rigged 3D characters is challenging due to pose ambiguity in 2D observations and morphological differences between source and target. Existing approaches often follow a reconstruct-then-retarget paradigm, tying transfer quality to intermediate 3D reconstruction and limiting applicability to categories with parametric templates. 
+        We propose <strong>MorphGS</strong>, a framework that formulates motion retargeting as a target-driven analysis-by-synthesis problem, directly optimizing target morphology and pose through image-space supervision.
+        A rig-coupled morphology parameterization factorizes character identity from time-varying joint rotations, while dense 2D-3D correspondences and synthesized views provide complementary structural and multi-view guidance. Experiments on synthetic benchmarks and real-world videos show consistent improvements over baselines.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="section" id="highlights">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Highlights</h2>
+
+    <div class="columns">
+      <div class="column">
+        <div class="highlight-box">
+          <h3>Target-driven Motion Transfer</h3>
+          <p>
+            MorphGS directly optimizes the target character's morphology and pose
+            from monocular video, avoiding explicit source 3D reconstruction.
+          </p>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="highlight-box">
+          <h3>Rig-coupled Morphology Adaptation</h3>
+          <p>
+            MorphGS factorizes time-invariant morphology from time-varying pose
+            using bone lengths, global scale, and local rest-pose offsets.
+          </p>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="highlight-box">
+          <h3>Image-space Optimization</h3>
+          <p>
+            Rendering losses, semantic correspondence, and synthesized-view guidance
+            jointly supervise morphology and pose from monocular video.
+          </p>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<section class="section" id="method">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 section-title has-text-centered">Method Overview</h2>
+    <div class="method">
+      <img src="./static/images/methods.png" alt="MorphGS method image">
+    </div>
+    <div class="content has-text-justified" style="margin-top: 1.5rem;">
+      <p>
+        MorphGS formulates video-to-3D motion transfer as a 
+        <strong>target-driven analysis-by-synthesis</strong> problem. 
+        Instead of reconstructing the source subject in 3D and retargeting afterward, 
+        MorphGS directly optimizes the target character's morphology and pose to reproduce 
+        the motion observed in a monocular video.
+      </p>
+      <p>
+        The target is represented with <strong>rig-coupled morphology parameters</strong>, 
+        including global scale, bone lengths, and local rest-pose offsets, while a 
+        time-conditioned pose network predicts per-frame joint rotations and root motion. 
+        This factorization separates time-invariant character morphology from 
+        time-varying articulated motion.
+      </p>
+      <p>
+        Optimization is guided by <strong>image-space supervision</strong>, including 
+        rendering losses, dense 2D-3D correspondences, and synthesized-view guidance, 
+        enabling motion transfer under source-target morphology gaps and monocular ambiguity.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="qualitative-results">
+  <div class="container is-max-desktop content">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3 section-title">Qualitative Results</h2>
+        <p>
+          We show video comparisons across synthetic benchmarks, real-world human and animal videos,
+          and cross-category motion transfer settings. Please refer to the paper for quantitative evaluations and ablation studies.
+        </p>
+      </div>
+    </div>
+
+    <div id="comparison-root" class="qualitative-wrapper"></div>
+  </div>
+</section>
+
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 section-title has-text-centered">BibTeX</h2>
+    <pre class="bibtex-box"><code>
+@inproceedings{
+  kim2026morphgs,
+  title     = {MorphGS: Morphology-Adaptive Articulated 3D Motion Transfer from Videos},
+  author    = {Kim, Taeyeon and Na, Youngju and Lee, Jumin and Lee, Sebin and Sung, Minhyuk and Yoon, Sung-Eui},
+  booktitle = {European Conference on Computer Vision},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="has-text-centered">
+  <p>
+    Website template adapted from Nerfies.
+  </p>
+</footer>
+
+<script>
+  const comparisonSets = [
+    {
+      title: 'Qualitative Comparison on Synthetic Benchmarks',
+      desc: 'Mixamo humanoid motion transfer.',
+      videos: [
+        'static/videos/m1_row.mp4',
+        'static/videos/m2_row.mp4',
+        'static/videos/m3_row.mp4'
+      ]
+    },
+    {
+      desc: 'DT4D quadruped motion transfer.',
+      videos: [
+        'static/videos/d1_row.mp4',
+        'static/videos/d2_row.mp4',
+        'static/videos/d3_row.mp4',
+      ]
+    },
+    {
+      desc: 'DT4D non-quadruped motion transfer.',
+      videos: [
+        'static/videos/o1_row.mp4',
+        'static/videos/o2_row.mp4'
+      ]
+    },
+    {
+      title: 'Qualitative Comparison on Real-world Videos',
+      desc: 'Real-world human videos.',
+      videos: [
+        'static/videos/h1_row.mp4',
+        'static/videos/h2_row.mp4'
+      ]
+    },
+    {
+      desc: 'Real-world animal videos.',
+      videos: [
+        'static/videos/a1_row.mp4',
+        'static/videos/a2_row.mp4'
+      ]
+    },
+    {
+      title: 'Cross-category Motion Transfer',
+      desc: 'Cross-category transfer from rabbit motion to cross-category targets.',
+      videos: [
+        'static/videos/cross_row.mp4',
+      ]
+    }
+  ];
+
+  const root = document.getElementById('comparison-root');
+
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+      } else {
+        video.pause();
+      }
+    });
+  }, {
+    rootMargin: '0px',
+    threshold: 0.1
+  });
+
+  function createVideoPanel(src) {
+    const panel = document.createElement('div');
+    panel.className = 'media-panel';
+
+    const box = document.createElement('div');
+    box.className = 'media-box';
+
+    const video = document.createElement('video');
+    video.className = 'observe-video';
+    video.loop = true;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    video.controls = false;
+
+    video.setAttribute('loop', '');
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+
+    // Keep controls hidden even on hover.
+    video.controls = false;
+
+    const source = document.createElement('source');
+    source.src = src;
+    source.type = 'video/mp4';
+
+    video.appendChild(source);
+    box.appendChild(video);
+    panel.appendChild(box);
+
+    return panel;
+  }
+
+  comparisonSets.forEach((set) => {
+    const block = document.createElement('div');
+    block.className = 'comparison-block';
+
+    if (set.title) {
+      const title = document.createElement('h3');
+      title.className = 'comparison-block-title';
+      title.textContent = set.title;
+      block.appendChild(title);
+    }
+
+    const desc = document.createElement('p');
+    desc.className = 'comparison-block-desc';
+    desc.textContent = set.desc;
+
+    const stack = document.createElement('div');
+    stack.className = 'comparison-grid-stack';
+
+    set.videos.forEach((videoSrc) => {
+      stack.appendChild(createVideoPanel(videoSrc));
+    });
+
+    block.appendChild(desc);
+    block.appendChild(stack);
+    root.appendChild(block);
+  });
+
+  window.addEventListener('load', () => {
+    document.querySelectorAll('video.observe-video').forEach(v => {
+      videoObserver.observe(v);
+    });
+  });
+</script>
+
+</body>
+</html>
